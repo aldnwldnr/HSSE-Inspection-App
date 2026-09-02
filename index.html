@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>HSSE Inspection App</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      margin: 0;
+      padding: 30px;
+    }
+
+    .container {
+      max-width: 650px;
+      margin: auto;
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      color: #1b4332;
+      margin-bottom: 5px;
+    }
+
+    .subtitle {
+      color: #666;
+      margin-bottom: 30px;
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 6px;
+      box-sizing: border-box;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+
+    .checklist {
+      margin-top: 20px;
+      padding: 15px;
+      background: #f8f9fa;
+      border-radius: 8px;
+    }
+
+    .check-item {
+      margin: 10px 0;
+    }
+
+    .check-item input {
+      width: auto;
+      margin-right: 8px;
+    }
+
+    button {
+      width: 100%;
+      margin-top: 25px;
+      padding: 14px;
+      background: #1b4332;
+      color: white;
+      border: none;
+      border-radius: 7px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #2d6a4f;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <h1>HSSE Inspection</h1>
+  <div class="subtitle">Workplace Safety Inspection Form</div>
+
+  <label>Nama Inspector</label>
+  <input type="text" placeholder="Masukkan nama inspector">
+
+  <label>Tanggal Inspeksi</label>
+  <input type="date">
+
+  <label>Area Inspeksi</label>
+  <select>
+    <option value="">Pilih area</option>
+    <option>Jetty</option>
+    <option>Warehouse</option>
+    <option>Workshop</option>
+    <option>Office</option>
+    <option>Yard</option>
+  </select>
+
+  <div class="checklist">
+
+    <strong>Safety Checklist</strong>
+
+    <div class="check-item">
+      <input type="checkbox">
+      APD digunakan dengan lengkap
+    </div>
+
+    <div class="check-item">
+      <input type="checkbox">
+      Area kerja dalam kondisi aman
+    </div>
+
+    <div class="check-item">
+      <input type="checkbox">
+      Housekeeping dalam kondisi baik
+    </div>
+
+    <div class="check-item">
+      <input type="checkbox">
+      APAR tersedia dan dapat diakses
+    </div>
+
+    <div class="check-item">
+      <input type="checkbox">
+      Jalur evakuasi tidak terhalang
+    </div>
+
+  </div>
+
+  <label>Temuan / Unsafe Condition</label>
+  <textarea rows="4"
+    placeholder="Tuliskan temuan hasil inspeksi..."></textarea>
+
+  <label>Risk Level</label>
+  <select>
+    <option>Low</option>
+    <option>Medium</option>
+    <option>High</option>
+    <option>Critical</option>
+  </select>
+
+  <label>Corrective Action</label>
+  <textarea rows="4"
+    placeholder="Tuliskan tindakan perbaikan..."></textarea>
+
+  <button>Simpan Inspeksi</button>
+
+</div>
+
+</body>
+</html>
