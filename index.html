@@ -1,16 +1,11 @@
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
-
 <meta charset="UTF-8">
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>HSSE Inspection System</title>
 
 <style>
-
 * {
   box-sizing: border-box;
 }
@@ -39,22 +34,27 @@ body {
   opacity: .85;
 }
 
+.connection {
+  margin-top: 8px;
+  font-size: 12px;
+}
+
 .container {
-  max-width: 1250px;
+  max-width: 1350px;
   margin: auto;
   padding: 25px;
 }
 
 .dashboard {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(6, 1fr);
   gap: 15px;
   margin-bottom: 25px;
 }
 
 .card {
   background: white;
-  padding: 20px;
+  padding: 18px;
   border-radius: 10px;
   box-shadow: 0 2px 8px rgba(0,0,0,.08);
 }
@@ -67,13 +67,13 @@ body {
 
 .card .number {
   margin-top: 8px;
-  font-size: 29px;
+  font-size: 28px;
   font-weight: bold;
 }
 
 .main-grid {
   display: grid;
-  grid-template-columns: 1fr 1.6fr;
+  grid-template-columns: 1fr 1.7fr;
   gap: 20px;
 }
 
@@ -111,6 +111,12 @@ textarea {
   resize: vertical;
 }
 
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
 .checklist {
   margin-top: 18px;
   background: #f7f8f8;
@@ -135,7 +141,7 @@ textarea {
 
 .btn {
   border: none;
-  padding: 12px 18px;
+  padding: 11px 16px;
   border-radius: 6px;
   cursor: pointer;
   font-weight: bold;
@@ -160,12 +166,11 @@ textarea {
 .btn-refresh {
   background: #e9ecef;
   color: #333;
-  padding: 10px 14px;
 }
 
 .filters {
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr auto;
+  grid-template-columns: 2fr 1fr 1fr 1fr auto;
   gap: 10px;
   margin-bottom: 15px;
 }
@@ -183,13 +188,13 @@ table {
 th {
   background: #153d32;
   color: white;
-  padding: 11px;
+  padding: 10px;
   text-align: left;
   white-space: nowrap;
 }
 
 td {
-  padding: 10px;
+  padding: 9px;
   border-bottom: 1px solid #ddd;
   vertical-align: top;
 }
@@ -200,7 +205,7 @@ tr:hover {
 
 .badge {
   display: inline-block;
-  padding: 5px 9px;
+  padding: 5px 8px;
   border-radius: 14px;
   font-size: 11px;
   font-weight: bold;
@@ -236,6 +241,22 @@ tr:hover {
   color: #155724;
 }
 
+.pending {
+  background: #e2e3e5;
+  color: #383d41;
+}
+
+.verified {
+  background: #d4edda;
+  color: #155724;
+}
+
+.overdue {
+  background: #f8d7da;
+  color: #721c24;
+  font-weight: bold;
+}
+
 .message {
   display: none;
   padding: 12px;
@@ -254,22 +275,11 @@ tr:hover {
   color: #721c24;
 }
 
-.loading {
+.loading,
+.empty {
   padding: 25px;
   text-align: center;
   color: #777;
-}
-
-.empty {
-  padding: 30px;
-  text-align: center;
-  color: #777;
-}
-
-.connection {
-  font-size: 12px;
-  margin-top: 8px;
-  opacity: .85;
 }
 
 .footer {
@@ -279,10 +289,9 @@ tr:hover {
   font-size: 12px;
 }
 
-@media(max-width: 950px) {
-
+@media(max-width: 1050px) {
   .dashboard {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
   }
 
   .main-grid {
@@ -290,13 +299,11 @@ tr:hover {
   }
 
   .filters {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr;
   }
-
 }
 
-@media(max-width: 550px) {
-
+@media(max-width: 600px) {
   .container {
     padding: 15px;
   }
@@ -305,389 +312,350 @@ tr:hover {
     grid-template-columns: 1fr 1fr;
   }
 
-  .header {
-    padding: 18px;
+  .form-row {
+    grid-template-columns: 1fr;
   }
 
+  .filters {
+    grid-template-columns: 1fr;
+  }
 }
-
 </style>
-
 </head>
-
 
 <body>
 
-
 <div class="header">
-
-<h1>HSSE Inspection System</h1>
-
-<p>
-Workplace Safety Inspection & Corrective Action Monitoring
-</p>
-
-<div class="connection" id="connectionStatus">
-Connecting to database...
+  <h1>HSSE Inspection System</h1>
+  <p>Workplace Safety Inspection & Corrective Action Monitoring</p>
+  <div class="connection" id="connectionStatus">
+    Connecting to database...
+  </div>
 </div>
-
-</div>
-
 
 <div class="container">
 
-
-<div class="dashboard">
-
-<div class="card">
-<h3>Total Inspection</h3>
-<div class="number" id="totalCount">0</div>
-</div>
-
-<div class="card">
-<h3>Open</h3>
-<div class="number" id="openCount">0</div>
-</div>
-
-<div class="card">
-<h3>Closed</h3>
-<div class="number" id="closedCount">0</div>
-</div>
-
-<div class="card">
-<h3>High Risk</h3>
-<div class="number" id="highCount">0</div>
-</div>
-
-<div class="card">
-<h3>Critical</h3>
-<div class="number" id="criticalCount">0</div>
-</div>
-
-</div>
-
-
-<div class="main-grid">
-
-
-<div class="panel">
-
-<h2>New Inspection</h2>
-
-
-<label>Inspector *</label>
-
-<input
-id="inspector"
-type="text"
-placeholder="Nama inspector"
->
-
-
-<label>Tanggal Inspeksi *</label>
-
-<input
-id="tanggal"
-type="date"
->
-
-
-<label>Area *</label>
-
-<select id="area">
-
-<option value="">Pilih Area</option>
-<option>Jetty</option>
-<option>Warehouse</option>
-<option>Workshop</option>
-<option>Yard</option>
-<option>Office</option>
-<option>Gate</option>
-
-</select>
-
-
-<div class="checklist">
-
-<strong>Safety Checklist</strong>
-
-<div class="check-item">
-<input type="checkbox">
-APD digunakan dengan benar
-</div>
-
-<div class="check-item">
-<input type="checkbox">
-Area kerja dalam kondisi aman
-</div>
-
-<div class="check-item">
-<input type="checkbox">
-Housekeeping dalam kondisi baik
-</div>
-
-<div class="check-item">
-<input type="checkbox">
-APAR tersedia dan dapat diakses
-</div>
-
-<div class="check-item">
-<input type="checkbox">
-Akses darurat tidak terhalang
-</div>
-
-</div>
-
-
-<label>Temuan / Unsafe Condition</label>
-
-<textarea
-id="temuan"
-rows="4"
-placeholder="Deskripsikan unsafe act / unsafe condition"
-></textarea>
-
-
-<label>Risk Level *</label>
-
-<select id="risk">
-
-<option>Low</option>
-<option>Medium</option>
-<option>High</option>
-<option>Critical</option>
-
-</select>
-
-
-<label>Corrective Action</label>
-
-<textarea
-id="correctiveAction"
-rows="4"
-placeholder="Tuliskan tindakan perbaikan"
-></textarea>
-
-
-<label>Status *</label>
-
-<select id="status">
-
-<option>Open</option>
-<option>Closed</option>
-
-</select>
-
-
-<button
-id="saveButton"
-class="btn btn-primary"
-onclick="simpanInspeksi()"
->
-
-Simpan Inspeksi
-
-</button>
-
-
-<div
-id="successMessage"
-class="message success"
->
-Data inspeksi berhasil disimpan ke database.
-</div>
-
-
-<div
-id="errorMessage"
-class="message error"
-></div>
-
-</div>
-
-
-
-<div class="panel">
-
-<h2>Inspection Records</h2>
-
-
-<div class="filters">
-
-<input
-id="search"
-placeholder="Cari inspector, area atau temuan..."
-oninput="renderTable()"
->
-
-
-<select
-id="filterRisk"
-onchange="renderTable()"
->
-
-<option value="">Semua Risk</option>
-<option>Low</option>
-<option>Medium</option>
-<option>High</option>
-<option>Critical</option>
-
-</select>
-
-
-<select
-id="filterStatus"
-onchange="renderTable()"
->
-
-<option value="">Semua Status</option>
-<option>Open</option>
-<option>Closed</option>
-
-</select>
-
-
-<button
-class="btn btn-refresh"
-onclick="loadInspections()"
->
-Refresh
-</button>
-
-</div>
-
-
-<div class="table-wrapper">
-
-<table>
-
-<thead>
-
-<tr>
-
-<th>ID</th>
-<th>Tanggal</th>
-<th>Inspector</th>
-<th>Area</th>
-<th>Risk</th>
-<th>Status</th>
-<th>Temuan</th>
-<th>Corrective Action</th>
-
-</tr>
-
-</thead>
-
-
-<tbody id="inspectionTable">
-
-<tr>
-<td colspan="8" class="loading">
-Loading database...
-</td>
-</tr>
-
-</tbody>
-
-</table>
+  <div class="dashboard">
+
+    <div class="card">
+      <h3>Total Inspection</h3>
+      <div class="number" id="totalCount">0</div>
+    </div>
+
+    <div class="card">
+      <h3>Open</h3>
+      <div class="number" id="openCount">0</div>
+    </div>
+
+    <div class="card">
+      <h3>Closed</h3>
+      <div class="number" id="closedCount">0</div>
+    </div>
+
+    <div class="card">
+      <h3>High Risk</h3>
+      <div class="number" id="highCount">0</div>
+    </div>
+
+    <div class="card">
+      <h3>Critical</h3>
+      <div class="number" id="criticalCount">0</div>
+    </div>
+
+    <div class="card">
+      <h3>Overdue</h3>
+      <div class="number" id="overdueCount">0</div>
+    </div>
+
+  </div>
+
+  <div class="main-grid">
+
+    <div class="panel">
+
+      <h2>New Inspection</h2>
+
+      <label>Inspector *</label>
+      <input id="inspector" type="text" placeholder="Nama inspector">
+
+      <label>Tanggal Inspeksi *</label>
+      <input id="tanggal" type="date">
+
+      <label>Area *</label>
+      <select id="area">
+        <option value="">Pilih Area</option>
+        <option>Jetty</option>
+        <option>Warehouse</option>
+        <option>Workshop</option>
+        <option>Yard</option>
+        <option>Office</option>
+        <option>Gate</option>
+      </select>
+
+      <div class="checklist">
+
+        <strong>Safety Checklist</strong>
+
+        <div class="check-item">
+          <input type="checkbox" id="checklist_apd">
+          APD digunakan dengan benar
+        </div>
+
+        <div class="check-item">
+          <input type="checkbox" id="checklist_area_aman">
+          Area kerja dalam kondisi aman
+        </div>
+
+        <div class="check-item">
+          <input type="checkbox" id="checklist_housekeeping">
+          Housekeeping dalam kondisi baik
+        </div>
+
+        <div class="check-item">
+          <input type="checkbox" id="checklist_apar">
+          APAR tersedia dan dapat diakses
+        </div>
+
+        <div class="check-item">
+          <input type="checkbox" id="checklist_emergency_access">
+          Akses darurat tidak terhalang
+        </div>
+
+      </div>
+
+      <label>Temuan / Unsafe Condition</label>
+      <textarea
+        id="temuan"
+        rows="4"
+        placeholder="Deskripsikan unsafe act / unsafe condition"
+      ></textarea>
+
+      <label>Risk Level *</label>
+      <select id="risk">
+        <option>Low</option>
+        <option>Medium</option>
+        <option>High</option>
+        <option>Critical</option>
+      </select>
+
+      <label>Corrective Action</label>
+      <textarea
+        id="correctiveAction"
+        rows="4"
+        placeholder="Tuliskan tindakan perbaikan"
+      ></textarea>
+
+      <div class="form-row">
+
+        <div>
+          <label>PIC Corrective Action</label>
+          <input
+            id="pic"
+            type="text"
+            placeholder="Nama PIC"
+          >
+        </div>
+
+        <div>
+          <label>Due Date</label>
+          <input
+            id="dueDate"
+            type="date"
+          >
+        </div>
+
+      </div>
+
+      <label>Status</label>
+      <input
+        value="Open"
+        disabled
+      >
+
+      <label>Verification Status</label>
+      <input
+        value="Pending"
+        disabled
+      >
+
+      <button
+        id="saveButton"
+        class="btn btn-primary"
+        onclick="simpanInspeksi()"
+      >
+        Simpan Inspeksi
+      </button>
+
+      <div
+        id="successMessage"
+        class="message success"
+      >
+        Data inspeksi berhasil disimpan.
+      </div>
+
+      <div
+        id="errorMessage"
+        class="message error"
+      ></div>
+
+    </div>
+
+    <div class="panel">
+
+      <h2>Inspection Records</h2>
+
+      <div class="filters">
+
+        <input
+          id="search"
+          placeholder="Cari ID, inspector, area atau temuan..."
+          oninput="renderTable()"
+        >
+
+        <select
+          id="filterRisk"
+          onchange="renderTable()"
+        >
+          <option value="">Semua Risk</option>
+          <option>Low</option>
+          <option>Medium</option>
+          <option>High</option>
+          <option>Critical</option>
+        </select>
+
+        <select
+          id="filterStatus"
+          onchange="renderTable()"
+        >
+          <option value="">Semua Status</option>
+          <option>Open</option>
+          <option>Closed</option>
+        </select>
+
+        <select
+          id="filterVerification"
+          onchange="renderTable()"
+        >
+          <option value="">Semua Verification</option>
+          <option>Pending</option>
+          <option>Verified</option>
+        </select>
+
+        <button
+          class="btn btn-refresh"
+          onclick="loadInspections()"
+        >
+          Refresh
+        </button>
+
+      </div>
+
+      <div class="table-wrapper">
+
+        <table>
+
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Tanggal</th>
+              <th>Inspector</th>
+              <th>Area</th>
+              <th>Risk</th>
+              <th>Status</th>
+              <th>Verification</th>
+              <th>PIC</th>
+              <th>Due Date</th>
+              <th>Temuan</th>
+              <th>Corrective Action</th>
+            </tr>
+          </thead>
+
+          <tbody id="inspectionTable">
+
+            <tr>
+              <td colspan="11" class="loading">
+                Loading database...
+              </td>
+            </tr>
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </div>
+
+  </div>
 
 </div>
-
-</div>
-
-
-</div>
-
-</div>
-
 
 <div class="footer">
-
-HSSE Inspection System — Cloud Database Version
-
+  HSSE Inspection System — Cloud Database Version
 </div>
-
-
-
-<!-- SUPABASE LIBRARY -->
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-
 <script>
 
-/* =====================================================
-   SUPABASE CONFIGURATION
-===================================================== */
-
+/* ================================
+   SUPABASE CONFIG
+================================ */
 
 const SUPABASE_URL =
 "https://dypkvwjwzuzatounoada.supabase.co";
 
-
 const SUPABASE_KEY =
 "sb_publishable_Rb1O6nNWAfU8SjhYxuW3oQ_nh5DZsNT";
-
 
 const db = window.supabase.createClient(
   SUPABASE_URL,
   SUPABASE_KEY
 );
 
-
 let inspections = [];
 
 
-/* =====================================================
-   GENERATE INSPECTION ID
-===================================================== */
-
+/* ================================
+   ID GENERATOR
+================================ */
 
 function generateInspectionID() {
 
   const now = new Date();
 
-  const year =
-    now.getFullYear();
+  const yy =
+    String(now.getFullYear()).slice(-2);
 
-  const month =
+  const mm =
     String(now.getMonth() + 1).padStart(2, "0");
 
-  const day =
+  const dd =
     String(now.getDate()).padStart(2, "0");
 
-  const time =
-    String(now.getHours()).padStart(2, "0") +
-    String(now.getMinutes()).padStart(2, "0") +
-    String(now.getSeconds()).padStart(2, "0");
-
   const random =
-    Math.floor(Math.random() * 900 + 100);
+    String(Math.floor(Math.random() * 9000) + 1000);
 
-  return `INS-${year}${month}${day}-${time}-${random}`;
-
+  return `HSSE-${yy}${mm}${dd}-${random}`;
 }
 
 
-/* =====================================================
-   LOAD DATA FROM SUPABASE
-===================================================== */
-
+/* ================================
+   LOAD DATA
+================================ */
 
 async function loadInspections() {
 
   const table =
     document.getElementById("inspectionTable");
 
-  table.innerHTML =
-  `
-  <tr>
-  <td colspan="8" class="loading">
-  Loading database...
-  </td>
-  </tr>
+  table.innerHTML = `
+    <tr>
+      <td colspan="11" class="loading">
+        Loading database...
+      </td>
+    </tr>
   `;
-
 
   const { data, error } =
     await db
@@ -696,7 +664,6 @@ async function loadInspections() {
       .order("created_at", {
         ascending: false
       });
-
 
   if (error) {
 
@@ -707,15 +674,6 @@ async function loadInspections() {
     ).innerText =
       "Database connection error";
 
-    table.innerHTML =
-    `
-    <tr>
-    <td colspan="8" class="empty">
-    Gagal mengambil data dari database.
-    </td>
-    </tr>
-    `;
-
     showError(
       "Database error: " + error.message
     );
@@ -723,74 +681,66 @@ async function loadInspections() {
     return;
   }
 
-
   inspections = data || [];
-
 
   document.getElementById(
     "connectionStatus"
   ).innerText =
     "Database connected";
 
-
   renderTable();
 
   updateDashboard();
-
 }
 
 
-/* =====================================================
+/* ================================
    SAVE INSPECTION
-===================================================== */
-
+================================ */
 
 async function simpanInspeksi() {
 
   hideMessages();
-
 
   const inspector =
     document.getElementById(
       "inspector"
     ).value.trim();
 
-
   const tanggal =
     document.getElementById(
       "tanggal"
     ).value;
-
 
   const area =
     document.getElementById(
       "area"
     ).value;
 
-
   const temuan =
     document.getElementById(
       "temuan"
     ).value.trim();
-
 
   const risk =
     document.getElementById(
       "risk"
     ).value;
 
-
   const correctiveAction =
     document.getElementById(
       "correctiveAction"
     ).value.trim();
 
-
-  const status =
+  const pic =
     document.getElementById(
-      "status"
-    ).value;
+      "pic"
+    ).value.trim();
 
+  const dueDate =
+    document.getElementById(
+      "dueDate"
+    ).value || null;
 
   if (!inspector || !tanggal || !area) {
 
@@ -800,7 +750,6 @@ async function simpanInspeksi() {
 
     return;
   }
-
 
   const inspectionData = {
 
@@ -820,28 +769,59 @@ async function simpanInspeksi() {
       risk,
 
     status:
-      status,
+      "Open",
 
     temuan:
       temuan,
 
     corrective_action:
-      correctiveAction
+      correctiveAction,
+
+    checklist_apd:
+      document.getElementById(
+        "checklist_apd"
+      ).checked,
+
+    checklist_area_aman:
+      document.getElementById(
+        "checklist_area_aman"
+      ).checked,
+
+    checklist_housekeeping:
+      document.getElementById(
+        "checklist_housekeeping"
+      ).checked,
+
+    checklist_apar:
+      document.getElementById(
+        "checklist_apar"
+      ).checked,
+
+    checklist_emergency_access:
+      document.getElementById(
+        "checklist_emergency_access"
+      ).checked,
+
+    pic:
+      pic,
+
+    due_date:
+      dueDate,
+
+    verification_status:
+      "Pending"
 
   };
-
 
   const saveButton =
     document.getElementById(
       "saveButton"
     );
 
-
   saveButton.disabled = true;
 
   saveButton.innerText =
     "Menyimpan...";
-
 
   const { error } =
     await db
@@ -850,52 +830,47 @@ async function simpanInspeksi() {
         inspectionData
       ]);
 
-
   saveButton.disabled = false;
 
   saveButton.innerText =
     "Simpan Inspeksi";
-
 
   if (error) {
 
     console.error(error);
 
     showError(
-      "Gagal menyimpan data: " +
-      error.message
+      "Gagal menyimpan data: "
+      + error.message
     );
 
     return;
   }
 
-
   document.getElementById(
     "successMessage"
-  ).style.display = "block";
-
+  ).style.display =
+    "block";
 
   resetForm();
 
-
   await loadInspections();
 
-
-  setTimeout(function () {
+  setTimeout(function() {
 
     document.getElementById(
       "successMessage"
-    ).style.display = "none";
+    ).style.display =
+      "none";
 
   }, 3000);
 
 }
 
 
-/* =====================================================
+/* ================================
    RENDER TABLE
-===================================================== */
-
+================================ */
 
 function renderTable() {
 
@@ -904,222 +879,127 @@ function renderTable() {
       "inspectionTable"
     );
 
-
   const search =
     document.getElementById(
       "search"
     ).value.toLowerCase();
-
 
   const riskFilter =
     document.getElementById(
       "filterRisk"
     ).value;
 
-
   const statusFilter =
     document.getElementById(
       "filterStatus"
     ).value;
 
+  const verificationFilter =
+    document.getElementById(
+      "filterVerification"
+    ).value;
 
   const filtered =
     inspections.filter(function(item) {
 
-
-      const inspector =
-        (item.inspector || "")
-        .toLowerCase();
-
-
-      const area =
-        (item.area || "")
-        .toLowerCase();
-
-
-      const temuan =
-        (item.temuan || "")
-        .toLowerCase();
-
-
-      const inspectionID =
+      const searchable = (
         (item.inspection_id || "")
-        .toLowerCase();
-
+        + " "
+        + (item.inspector || "")
+        + " "
+        + (item.area || "")
+        + " "
+        + (item.temuan || "")
+        + " "
+        + (item.pic || "")
+      ).toLowerCase();
 
       const matchSearch =
-
-        inspector.includes(search)
-
-        ||
-
-        area.includes(search)
-
-        ||
-
-        temuan.includes(search)
-
-        ||
-
-        inspectionID.includes(search);
-
+        searchable.includes(search);
 
       const matchRisk =
-
         !riskFilter
-
-        ||
-
-        item.risk === riskFilter;
-
+        || item.risk === riskFilter;
 
       const matchStatus =
-
         !statusFilter
+        || item.status === statusFilter;
 
-        ||
-
-        item.status === statusFilter;
-
+      const matchVerification =
+        !verificationFilter
+        || item.verification_status === verificationFilter;
 
       return (
-
         matchSearch
-
         &&
-
         matchRisk
-
         &&
-
         matchStatus
-
+        &&
+        matchVerification
       );
 
     });
 
-
   if (filtered.length === 0) {
 
-    table.innerHTML =
-    `
-    <tr>
-    <td colspan="8" class="empty">
-    Belum ada data inspeksi.
-    </td>
-    </tr>
+    table.innerHTML = `
+      <tr>
+        <td colspan="11" class="empty">
+          Belum ada data inspeksi.
+        </td>
+      </tr>
     `;
 
     return;
   }
 
-
   table.innerHTML = "";
 
-
   filtered.forEach(function(item) {
-
 
     const row =
       document.createElement("tr");
 
+    row.innerHTML = `
 
-    const idCell =
-      document.createElement("td");
+      <td>${safe(item.inspection_id)}</td>
 
-    idCell.textContent =
-      item.inspection_id || "-";
+      <td>${formatTanggal(item.tanggal)}</td>
 
+      <td>${safe(item.inspector)}</td>
 
-    const tanggalCell =
-      document.createElement("td");
+      <td>${safe(item.area)}</td>
 
-    tanggalCell.textContent =
-      formatTanggal(item.tanggal);
+      <td>
+        <span class="badge ${riskClass(item.risk)}">
+          ${safe(item.risk)}
+        </span>
+      </td>
 
+      <td>
+        <span class="badge ${statusClass(item.status)}">
+          ${safe(item.status)}
+        </span>
+      </td>
 
-    const inspectorCell =
-      document.createElement("td");
+      <td>
+        <span class="badge ${verificationClass(item.verification_status)}">
+          ${safe(item.verification_status || "Pending")}
+        </span>
+      </td>
 
-    inspectorCell.textContent =
-      item.inspector || "-";
+      <td>${safe(item.pic)}</td>
 
+      <td class="${isOverdue(item) ? "overdue" : ""}">
+        ${formatTanggal(item.due_date)}
+      </td>
 
-    const areaCell =
-      document.createElement("td");
+      <td>${safe(item.temuan)}</td>
 
-    areaCell.textContent =
-      item.area || "-";
+      <td>${safe(item.corrective_action)}</td>
 
-
-    const riskCell =
-      document.createElement("td");
-
-    const riskBadge =
-      document.createElement("span");
-
-    riskBadge.className =
-      "badge " +
-      (item.risk || "low")
-      .toLowerCase();
-
-    riskBadge.textContent =
-      item.risk || "-";
-
-    riskCell.appendChild(
-      riskBadge
-    );
-
-
-    const statusCell =
-      document.createElement("td");
-
-    const statusBadge =
-      document.createElement("span");
-
-    statusBadge.className =
-      "badge " +
-      (item.status || "open")
-      .toLowerCase();
-
-    statusBadge.textContent =
-      item.status || "-";
-
-    statusCell.appendChild(
-      statusBadge
-    );
-
-
-    const temuanCell =
-      document.createElement("td");
-
-    temuanCell.textContent =
-      item.temuan || "-";
-
-
-    const correctiveCell =
-      document.createElement("td");
-
-    correctiveCell.textContent =
-      item.corrective_action || "-";
-
-
-    row.appendChild(idCell);
-
-    row.appendChild(tanggalCell);
-
-    row.appendChild(inspectorCell);
-
-    row.appendChild(areaCell);
-
-    row.appendChild(riskCell);
-
-    row.appendChild(statusCell);
-
-    row.appendChild(temuanCell);
-
-    row.appendChild(correctiveCell);
-
+    `;
 
     table.appendChild(row);
 
@@ -1128,19 +1008,16 @@ function renderTable() {
 }
 
 
-/* =====================================================
+/* ================================
    DASHBOARD
-===================================================== */
-
+================================ */
 
 function updateDashboard() {
-
 
   document.getElementById(
     "totalCount"
   ).innerText =
     inspections.length;
-
 
   document.getElementById(
     "openCount"
@@ -1149,14 +1026,12 @@ function updateDashboard() {
       x => x.status === "Open"
     ).length;
 
-
   document.getElementById(
     "closedCount"
   ).innerText =
     inspections.filter(
       x => x.status === "Closed"
     ).length;
-
 
   document.getElementById(
     "highCount"
@@ -1165,7 +1040,6 @@ function updateDashboard() {
       x => x.risk === "High"
     ).length;
 
-
   document.getElementById(
     "criticalCount"
   ).innerText =
@@ -1173,13 +1047,45 @@ function updateDashboard() {
       x => x.risk === "Critical"
     ).length;
 
+  document.getElementById(
+    "overdueCount"
+  ).innerText =
+    inspections.filter(
+      x => isOverdue(x)
+    ).length;
 }
 
 
-/* =====================================================
-   RESET FORM
-===================================================== */
+/* ================================
+   OVERDUE
+================================ */
 
+function isOverdue(item) {
+
+  if (!item.due_date)
+    return false;
+
+  if (item.status === "Closed")
+    return false;
+
+  const today = new Date();
+
+  today.setHours(
+    0, 0, 0, 0
+  );
+
+  const due =
+    new Date(
+      item.due_date + "T00:00:00"
+    );
+
+  return due < today;
+}
+
+
+/* ================================
+   RESET FORM
+================================ */
 
 function resetForm() {
 
@@ -1187,68 +1093,78 @@ function resetForm() {
     "inspector"
   ).value = "";
 
-
   document.getElementById(
     "tanggal"
   ).value = "";
-
 
   document.getElementById(
     "area"
   ).value = "";
 
-
   document.getElementById(
     "temuan"
   ).value = "";
-
 
   document.getElementById(
     "risk"
   ).value = "Low";
 
-
   document.getElementById(
     "correctiveAction"
   ).value = "";
 
+  document.getElementById(
+    "pic"
+  ).value = "";
 
   document.getElementById(
-    "status"
-  ).value = "Open";
-
+    "dueDate"
+  ).value = "";
 
   document
     .querySelectorAll(
       '.checklist input[type="checkbox"]'
     )
     .forEach(function(box) {
-
       box.checked = false;
-
     });
-
 }
 
 
-/* =====================================================
-   DATE FORMAT
-===================================================== */
+/* ================================
+   HELPERS
+================================ */
 
+function safe(value) {
+
+  if (
+    value === null
+    ||
+    value === undefined
+    ||
+    value === ""
+  ) {
+    return "-";
+  }
+
+  return String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
 
 function formatTanggal(dateString) {
 
   if (!dateString)
     return "-";
 
-
   const parts =
     dateString.split("-");
 
-
   if (parts.length !== 3)
     return dateString;
-
 
   return (
     parts[2]
@@ -1257,30 +1173,48 @@ function formatTanggal(dateString) {
     + "/"
     + parts[0]
   );
+}
 
+function riskClass(risk) {
+
+  return (
+    risk || "Low"
+  ).toLowerCase();
+}
+
+function statusClass(status) {
+
+  return (
+    status || "Open"
+  ).toLowerCase();
+}
+
+function verificationClass(status) {
+
+  if (status === "Verified")
+    return "verified";
+
+  return "pending";
 }
 
 
-/* =====================================================
-   MESSAGE
-===================================================== */
-
+/* ================================
+   MESSAGES
+================================ */
 
 function showError(message) {
 
-  const error =
+  const el =
     document.getElementById(
       "errorMessage"
     );
 
-  error.innerText =
+  el.innerText =
     message;
 
-  error.style.display =
+  el.style.display =
     "block";
-
 }
-
 
 function hideMessages() {
 
@@ -1289,26 +1223,20 @@ function hideMessages() {
   ).style.display =
     "none";
 
-
   document.getElementById(
     "errorMessage"
   ).style.display =
     "none";
-
 }
 
 
-/* =====================================================
-   START APPLICATION
-===================================================== */
-
+/* ================================
+   START
+================================ */
 
 loadInspections();
 
-
 </script>
 
-
 </body>
-
 </html>
