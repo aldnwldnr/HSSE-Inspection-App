@@ -1,7 +1,10 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
+
 <meta charset="UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>HSSE Inspection System</title>
@@ -14,13 +17,13 @@
 
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
+  font-family: Arial, Helvetica, sans-serif;
   background: #f3f5f7;
   color: #222;
 }
 
 .header {
-  background: #102f26;
+  background: #103c32;
   color: white;
   padding: 22px 30px;
 }
@@ -32,11 +35,12 @@ body {
 
 .header p {
   margin: 6px 0 0;
-  opacity: .8;
+  font-size: 13px;
+  opacity: .85;
 }
 
 .container {
-  max-width: 1200px;
+  max-width: 1250px;
   margin: auto;
   padding: 25px;
 }
@@ -57,19 +61,19 @@ body {
 
 .card h3 {
   margin: 0;
-  font-size: 14px;
+  font-size: 13px;
   color: #666;
 }
 
 .card .number {
   margin-top: 8px;
-  font-size: 28px;
+  font-size: 29px;
   font-weight: bold;
 }
 
 .main-grid {
   display: grid;
-  grid-template-columns: 1fr 1.4fr;
+  grid-template-columns: 1fr 1.6fr;
   gap: 20px;
 }
 
@@ -88,6 +92,7 @@ body {
 label {
   display: block;
   font-weight: bold;
+  font-size: 13px;
   margin-top: 14px;
 }
 
@@ -99,6 +104,7 @@ textarea {
   margin-top: 6px;
   border: 1px solid #ccc;
   border-radius: 6px;
+  font-family: inherit;
 }
 
 textarea {
@@ -106,18 +112,25 @@ textarea {
 }
 
 .checklist {
-  background: #f7f8f8;
-  padding: 15px;
   margin-top: 18px;
+  background: #f7f8f8;
+  padding: 16px;
   border-radius: 8px;
 }
 
+.checklist strong {
+  display: block;
+  margin-bottom: 10px;
+}
+
 .check-item {
-  margin: 10px 0;
+  margin: 9px 0;
+  font-size: 13px;
 }
 
 .check-item input {
   width: auto;
+  margin-right: 7px;
 }
 
 .btn {
@@ -130,34 +143,29 @@ textarea {
 
 .btn-primary {
   width: 100%;
-  background: #176b50;
+  background: #187655;
   color: white;
   margin-top: 20px;
 }
 
 .btn-primary:hover {
-  background: #10523d;
+  background: #115b41;
 }
 
-.btn-small {
-  padding: 7px 10px;
-  font-size: 12px;
-  margin: 2px;
+.btn-primary:disabled {
+  opacity: .55;
+  cursor: not-allowed;
 }
 
-.btn-edit {
-  background: #e0a800;
-  color: white;
-}
-
-.btn-delete {
-  background: #c0392b;
-  color: white;
+.btn-refresh {
+  background: #e9ecef;
+  color: #333;
+  padding: 10px 14px;
 }
 
 .filters {
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr;
+  grid-template-columns: 2fr 1fr 1fr auto;
   gap: 10px;
   margin-bottom: 15px;
 }
@@ -169,7 +177,7 @@ textarea {
 table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 13px;
+  font-size: 12px;
 }
 
 th {
@@ -177,17 +185,23 @@ th {
   color: white;
   padding: 11px;
   text-align: left;
+  white-space: nowrap;
 }
 
 td {
   padding: 10px;
   border-bottom: 1px solid #ddd;
+  vertical-align: top;
+}
+
+tr:hover {
+  background: #f7f9f8;
 }
 
 .badge {
   display: inline-block;
   padding: 5px 9px;
-  border-radius: 15px;
+  border-radius: 14px;
   font-size: 11px;
   font-weight: bold;
 }
@@ -222,22 +236,50 @@ td {
   color: #155724;
 }
 
-.success {
+.message {
   display: none;
-  background: #d4edda;
   padding: 12px;
   border-radius: 6px;
   margin-top: 15px;
+  font-size: 13px;
+}
+
+.success {
+  background: #d4edda;
+  color: #155724;
+}
+
+.error {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+.loading {
+  padding: 25px;
+  text-align: center;
+  color: #777;
+}
+
+.empty {
+  padding: 30px;
+  text-align: center;
+  color: #777;
+}
+
+.connection {
+  font-size: 12px;
+  margin-top: 8px;
+  opacity: .85;
 }
 
 .footer {
   text-align: center;
   padding: 30px;
   color: #777;
-  font-size: 13px;
+  font-size: 12px;
 }
 
-@media(max-width: 900px) {
+@media(max-width: 950px) {
 
   .dashboard {
     grid-template-columns: repeat(2, 1fr);
@@ -253,20 +295,47 @@ td {
 
 }
 
+@media(max-width: 550px) {
+
+  .container {
+    padding: 15px;
+  }
+
+  .dashboard {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .header {
+    padding: 18px;
+  }
+
+}
+
 </style>
+
 </head>
 
+
 <body>
+
 
 <div class="header">
 
 <h1>HSSE Inspection System</h1>
 
-<p>Workplace Safety Inspection & Corrective Action Monitoring</p>
+<p>
+Workplace Safety Inspection & Corrective Action Monitoring
+</p>
+
+<div class="connection" id="connectionStatus">
+Connecting to database...
+</div>
 
 </div>
 
+
 <div class="container">
+
 
 <div class="dashboard">
 
@@ -300,19 +369,30 @@ td {
 
 <div class="main-grid">
 
+
 <div class="panel">
 
 <h2>New Inspection</h2>
 
-<input type="hidden" id="editIndex">
 
-<label>Inspector</label>
-<input id="inspector" placeholder="Nama inspector">
+<label>Inspector *</label>
 
-<label>Tanggal Inspeksi</label>
-<input type="date" id="tanggal">
+<input
+id="inspector"
+type="text"
+placeholder="Nama inspector"
+>
 
-<label>Area</label>
+
+<label>Tanggal Inspeksi *</label>
+
+<input
+id="tanggal"
+type="date"
+>
+
+
+<label>Area *</label>
 
 <select id="area">
 
@@ -338,17 +418,17 @@ APD digunakan dengan benar
 
 <div class="check-item">
 <input type="checkbox">
-Area kerja aman
+Area kerja dalam kondisi aman
 </div>
 
 <div class="check-item">
 <input type="checkbox">
-Housekeeping baik
+Housekeeping dalam kondisi baik
 </div>
 
 <div class="check-item">
 <input type="checkbox">
-APAR tersedia
+APAR tersedia dan dapat diakses
 </div>
 
 <div class="check-item">
@@ -364,11 +444,11 @@ Akses darurat tidak terhalang
 <textarea
 id="temuan"
 rows="4"
-placeholder="Deskripsikan unsafe act / unsafe condition">
-</textarea>
+placeholder="Deskripsikan unsafe act / unsafe condition"
+></textarea>
 
 
-<label>Risk Level</label>
+<label>Risk Level *</label>
 
 <select id="risk">
 
@@ -385,11 +465,11 @@ placeholder="Deskripsikan unsafe act / unsafe condition">
 <textarea
 id="correctiveAction"
 rows="4"
-placeholder="Tindakan perbaikan">
-</textarea>
+placeholder="Tuliskan tindakan perbaikan"
+></textarea>
 
 
-<label>Status</label>
+<label>Status *</label>
 
 <select id="status">
 
@@ -400,8 +480,10 @@ placeholder="Tindakan perbaikan">
 
 
 <button
+id="saveButton"
 class="btn btn-primary"
-onclick="simpanInspeksi()">
+onclick="simpanInspeksi()"
+>
 
 Simpan Inspeksi
 
@@ -409,14 +491,20 @@ Simpan Inspeksi
 
 
 <div
-id="success"
-class="success">
+id="successMessage"
+class="message success"
+>
+Data inspeksi berhasil disimpan ke database.
+</div>
 
-Data inspeksi berhasil disimpan.
+
+<div
+id="errorMessage"
+class="message error"
+></div>
 
 </div>
 
-</div>
 
 
 <div class="panel">
@@ -429,12 +517,14 @@ Data inspeksi berhasil disimpan.
 <input
 id="search"
 placeholder="Cari inspector, area atau temuan..."
-oninput="renderTable()">
+oninput="renderTable()"
+>
 
 
 <select
 id="filterRisk"
-onchange="renderTable()">
+onchange="renderTable()"
+>
 
 <option value="">Semua Risk</option>
 <option>Low</option>
@@ -447,13 +537,22 @@ onchange="renderTable()">
 
 <select
 id="filterStatus"
-onchange="renderTable()">
+onchange="renderTable()"
+>
 
 <option value="">Semua Status</option>
 <option>Open</option>
 <option>Closed</option>
 
 </select>
+
+
+<button
+class="btn btn-refresh"
+onclick="loadInspections()"
+>
+Refresh
+</button>
 
 </div>
 
@@ -473,13 +572,20 @@ onchange="renderTable()">
 <th>Risk</th>
 <th>Status</th>
 <th>Temuan</th>
-<th>Action</th>
+<th>Corrective Action</th>
 
 </tr>
 
 </thead>
 
+
 <tbody id="inspectionTable">
+
+<tr>
+<td colspan="8" class="loading">
+Loading database...
+</td>
+</tr>
 
 </tbody>
 
@@ -489,6 +595,7 @@ onchange="renderTable()">
 
 </div>
 
+
 </div>
 
 </div>
@@ -496,370 +603,712 @@ onchange="renderTable()">
 
 <div class="footer">
 
-HSSE Inspection System — Safety Management Application
+HSSE Inspection System — Cloud Database Version
 
 </div>
 
 
+
+<!-- SUPABASE LIBRARY -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
 <script>
 
-let inspections =
-JSON.parse(localStorage.getItem("hsseInspections")) || [];
+/* =====================================================
+   SUPABASE CONFIGURATION
+===================================================== */
 
 
-function generateID() {
-
-const now = new Date();
-
-return "INS-" +
-now.getFullYear() +
-String(now.getMonth()+1).padStart(2,"0") +
-String(now.getDate()).padStart(2,"0") +
-"-" +
-String(inspections.length + 1).padStart(3,"0");
-
-}
+const SUPABASE_URL =
+"https://dypkvwjwzuzatounoada.supabase.co";
 
 
-function simpanInspeksi() {
-
-const inspector =
-document.getElementById("inspector").value.trim();
-
-const tanggal =
-document.getElementById("tanggal").value;
-
-const area =
-document.getElementById("area").value;
-
-const temuan =
-document.getElementById("temuan").value.trim();
-
-const risk =
-document.getElementById("risk").value;
-
-const correctiveAction =
-document.getElementById("correctiveAction").value.trim();
-
-const status =
-document.getElementById("status").value;
-
-const editIndex =
-document.getElementById("editIndex").value;
+const SUPABASE_KEY =
+"sb_publishable_Rb1O6nNWAfU8SjhYxuW3oQ_nh5DZsNT";
 
 
-if(!inspector || !tanggal || !area) {
-
-alert(
-"Inspector, tanggal dan area wajib diisi."
-);
-
-return;
-
-}
-
-
-const data = {
-
-id:
-editIndex === ""
-? generateID()
-: inspections[editIndex].id,
-
-inspector,
-tanggal,
-area,
-temuan,
-risk,
-correctiveAction,
-status
-
-};
-
-
-if(editIndex === "") {
-
-inspections.push(data);
-
-}
-
-else {
-
-inspections[editIndex] = data;
-
-}
-
-
-localStorage.setItem(
-"hsseInspections",
-JSON.stringify(inspections)
+const db = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
 );
 
 
-resetForm();
-
-renderTable();
-
-updateDashboard();
+let inspections = [];
 
 
-document.getElementById("success")
-.style.display = "block";
+/* =====================================================
+   GENERATE INSPECTION ID
+===================================================== */
 
 
-setTimeout(function(){
+function generateInspectionID() {
 
-document.getElementById("success")
-.style.display = "none";
+  const now = new Date();
 
-},2000);
+  const year =
+    now.getFullYear();
+
+  const month =
+    String(now.getMonth() + 1).padStart(2, "0");
+
+  const day =
+    String(now.getDate()).padStart(2, "0");
+
+  const time =
+    String(now.getHours()).padStart(2, "0") +
+    String(now.getMinutes()).padStart(2, "0") +
+    String(now.getSeconds()).padStart(2, "0");
+
+  const random =
+    Math.floor(Math.random() * 900 + 100);
+
+  return `INS-${year}${month}${day}-${time}-${random}`;
 
 }
+
+
+/* =====================================================
+   LOAD DATA FROM SUPABASE
+===================================================== */
+
+
+async function loadInspections() {
+
+  const table =
+    document.getElementById("inspectionTable");
+
+  table.innerHTML =
+  `
+  <tr>
+  <td colspan="8" class="loading">
+  Loading database...
+  </td>
+  </tr>
+  `;
+
+
+  const { data, error } =
+    await db
+      .from("inspections")
+      .select("*")
+      .order("created_at", {
+        ascending: false
+      });
+
+
+  if (error) {
+
+    console.error(error);
+
+    document.getElementById(
+      "connectionStatus"
+    ).innerText =
+      "Database connection error";
+
+    table.innerHTML =
+    `
+    <tr>
+    <td colspan="8" class="empty">
+    Gagal mengambil data dari database.
+    </td>
+    </tr>
+    `;
+
+    showError(
+      "Database error: " + error.message
+    );
+
+    return;
+  }
+
+
+  inspections = data || [];
+
+
+  document.getElementById(
+    "connectionStatus"
+  ).innerText =
+    "Database connected";
+
+
+  renderTable();
+
+  updateDashboard();
+
+}
+
+
+/* =====================================================
+   SAVE INSPECTION
+===================================================== */
+
+
+async function simpanInspeksi() {
+
+  hideMessages();
+
+
+  const inspector =
+    document.getElementById(
+      "inspector"
+    ).value.trim();
+
+
+  const tanggal =
+    document.getElementById(
+      "tanggal"
+    ).value;
+
+
+  const area =
+    document.getElementById(
+      "area"
+    ).value;
+
+
+  const temuan =
+    document.getElementById(
+      "temuan"
+    ).value.trim();
+
+
+  const risk =
+    document.getElementById(
+      "risk"
+    ).value;
+
+
+  const correctiveAction =
+    document.getElementById(
+      "correctiveAction"
+    ).value.trim();
+
+
+  const status =
+    document.getElementById(
+      "status"
+    ).value;
+
+
+  if (!inspector || !tanggal || !area) {
+
+    showError(
+      "Inspector, tanggal dan area wajib diisi."
+    );
+
+    return;
+  }
+
+
+  const inspectionData = {
+
+    inspection_id:
+      generateInspectionID(),
+
+    tanggal:
+      tanggal,
+
+    inspector:
+      inspector,
+
+    area:
+      area,
+
+    risk:
+      risk,
+
+    status:
+      status,
+
+    temuan:
+      temuan,
+
+    corrective_action:
+      correctiveAction
+
+  };
+
+
+  const saveButton =
+    document.getElementById(
+      "saveButton"
+    );
+
+
+  saveButton.disabled = true;
+
+  saveButton.innerText =
+    "Menyimpan...";
+
+
+  const { error } =
+    await db
+      .from("inspections")
+      .insert([
+        inspectionData
+      ]);
+
+
+  saveButton.disabled = false;
+
+  saveButton.innerText =
+    "Simpan Inspeksi";
+
+
+  if (error) {
+
+    console.error(error);
+
+    showError(
+      "Gagal menyimpan data: " +
+      error.message
+    );
+
+    return;
+  }
+
+
+  document.getElementById(
+    "successMessage"
+  ).style.display = "block";
+
+
+  resetForm();
+
+
+  await loadInspections();
+
+
+  setTimeout(function () {
+
+    document.getElementById(
+      "successMessage"
+    ).style.display = "none";
+
+  }, 3000);
+
+}
+
+
+/* =====================================================
+   RENDER TABLE
+===================================================== */
 
 
 function renderTable() {
 
-const table =
-document.getElementById("inspectionTable");
+  const table =
+    document.getElementById(
+      "inspectionTable"
+    );
 
-table.innerHTML = "";
 
+  const search =
+    document.getElementById(
+      "search"
+    ).value.toLowerCase();
 
-const search =
-document.getElementById("search")
-.value
-.toLowerCase();
 
+  const riskFilter =
+    document.getElementById(
+      "filterRisk"
+    ).value;
 
-const riskFilter =
-document.getElementById("filterRisk").value;
 
+  const statusFilter =
+    document.getElementById(
+      "filterStatus"
+    ).value;
 
-const statusFilter =
-document.getElementById("filterStatus").value;
 
+  const filtered =
+    inspections.filter(function(item) {
 
-inspections.forEach(function(item,index){
 
+      const inspector =
+        (item.inspector || "")
+        .toLowerCase();
 
-const matchSearch =
 
-item.inspector.toLowerCase().includes(search)
+      const area =
+        (item.area || "")
+        .toLowerCase();
 
-||
 
-item.area.toLowerCase().includes(search)
+      const temuan =
+        (item.temuan || "")
+        .toLowerCase();
 
-||
 
-item.temuan.toLowerCase().includes(search);
+      const inspectionID =
+        (item.inspection_id || "")
+        .toLowerCase();
 
 
-const matchRisk =
-!riskFilter ||
-item.risk === riskFilter;
+      const matchSearch =
 
+        inspector.includes(search)
 
-const matchStatus =
-!statusFilter ||
-item.status === statusFilter;
+        ||
 
+        area.includes(search)
 
-if(
-matchSearch &&
-matchRisk &&
-matchStatus
-){
+        ||
 
-const riskClass =
-item.risk.toLowerCase();
+        temuan.includes(search)
 
-const statusClass =
-item.status.toLowerCase();
+        ||
 
+        inspectionID.includes(search);
 
-table.innerHTML += `
 
-<tr>
+      const matchRisk =
 
-<td>${item.id}</td>
+        !riskFilter
 
-<td>${item.tanggal}</td>
+        ||
 
-<td>${item.inspector}</td>
+        item.risk === riskFilter;
 
-<td>${item.area}</td>
 
-<td>
-<span class="badge ${riskClass}">
-${item.risk}
-</span>
-</td>
+      const matchStatus =
 
-<td>
-<span class="badge ${statusClass}">
-${item.status}
-</span>
-</td>
+        !statusFilter
 
-<td>${item.temuan}</td>
+        ||
 
-<td>
+        item.status === statusFilter;
 
-<button
-class="btn btn-small btn-edit"
-onclick="editInspection(${index})">
 
-Edit
+      return (
 
-</button>
+        matchSearch
 
-<button
-class="btn btn-small btn-delete"
-onclick="hapusInspection(${index})">
+        &&
 
-Delete
+        matchRisk
 
-</button>
+        &&
 
-</td>
+        matchStatus
 
-</tr>
+      );
 
-`;
+    });
 
-}
 
-});
+  if (filtered.length === 0) {
 
-}
+    table.innerHTML =
+    `
+    <tr>
+    <td colspan="8" class="empty">
+    Belum ada data inspeksi.
+    </td>
+    </tr>
+    `;
 
+    return;
+  }
 
-function editInspection(index){
 
-const item = inspections[index];
+  table.innerHTML = "";
 
-document.getElementById("editIndex").value = index;
 
-document.getElementById("inspector").value =
-item.inspector;
+  filtered.forEach(function(item) {
 
-document.getElementById("tanggal").value =
-item.tanggal;
 
-document.getElementById("area").value =
-item.area;
+    const row =
+      document.createElement("tr");
 
-document.getElementById("temuan").value =
-item.temuan;
 
-document.getElementById("risk").value =
-item.risk;
+    const idCell =
+      document.createElement("td");
 
-document.getElementById("correctiveAction").value =
-item.correctiveAction;
+    idCell.textContent =
+      item.inspection_id || "-";
 
-document.getElementById("status").value =
-item.status;
 
+    const tanggalCell =
+      document.createElement("td");
 
-window.scrollTo({
-top:0,
-behavior:"smooth"
-});
+    tanggalCell.textContent =
+      formatTanggal(item.tanggal);
 
-}
 
+    const inspectorCell =
+      document.createElement("td");
 
-function hapusInspection(index){
+    inspectorCell.textContent =
+      item.inspector || "-";
 
-const confirmDelete =
-confirm(
-"Yakin ingin menghapus data inspeksi ini?"
-);
 
-if(!confirmDelete) return;
+    const areaCell =
+      document.createElement("td");
 
+    areaCell.textContent =
+      item.area || "-";
 
-inspections.splice(index,1);
 
+    const riskCell =
+      document.createElement("td");
 
-localStorage.setItem(
-"hsseInspections",
-JSON.stringify(inspections)
-);
+    const riskBadge =
+      document.createElement("span");
 
+    riskBadge.className =
+      "badge " +
+      (item.risk || "low")
+      .toLowerCase();
 
-renderTable();
+    riskBadge.textContent =
+      item.risk || "-";
 
-updateDashboard();
+    riskCell.appendChild(
+      riskBadge
+    );
 
-}
 
+    const statusCell =
+      document.createElement("td");
 
-function resetForm(){
+    const statusBadge =
+      document.createElement("span");
 
-document.getElementById("editIndex").value = "";
+    statusBadge.className =
+      "badge " +
+      (item.status || "open")
+      .toLowerCase();
 
-document.getElementById("inspector").value = "";
+    statusBadge.textContent =
+      item.status || "-";
 
-document.getElementById("tanggal").value = "";
+    statusCell.appendChild(
+      statusBadge
+    );
 
-document.getElementById("area").value = "";
 
-document.getElementById("temuan").value = "";
+    const temuanCell =
+      document.createElement("td");
 
-document.getElementById("risk").value = "Low";
+    temuanCell.textContent =
+      item.temuan || "-";
 
-document.getElementById("correctiveAction").value = "";
 
-document.getElementById("status").value = "Open";
+    const correctiveCell =
+      document.createElement("td");
 
-}
+    correctiveCell.textContent =
+      item.corrective_action || "-";
 
 
-function updateDashboard(){
+    row.appendChild(idCell);
 
-document.getElementById("totalCount")
-.innerText =
-inspections.length;
+    row.appendChild(tanggalCell);
 
+    row.appendChild(inspectorCell);
 
-document.getElementById("openCount")
-.innerText =
-inspections.filter(
-x => x.status === "Open"
-).length;
+    row.appendChild(areaCell);
 
+    row.appendChild(riskCell);
 
-document.getElementById("closedCount")
-.innerText =
-inspections.filter(
-x => x.status === "Closed"
-).length;
+    row.appendChild(statusCell);
 
+    row.appendChild(temuanCell);
 
-document.getElementById("highCount")
-.innerText =
-inspections.filter(
-x => x.risk === "High"
-).length;
+    row.appendChild(correctiveCell);
 
 
-document.getElementById("criticalCount")
-.innerText =
-inspections.filter(
-x => x.risk === "Critical"
-).length;
+    table.appendChild(row);
+
+  });
 
 }
 
 
-renderTable();
+/* =====================================================
+   DASHBOARD
+===================================================== */
 
-updateDashboard();
+
+function updateDashboard() {
+
+
+  document.getElementById(
+    "totalCount"
+  ).innerText =
+    inspections.length;
+
+
+  document.getElementById(
+    "openCount"
+  ).innerText =
+    inspections.filter(
+      x => x.status === "Open"
+    ).length;
+
+
+  document.getElementById(
+    "closedCount"
+  ).innerText =
+    inspections.filter(
+      x => x.status === "Closed"
+    ).length;
+
+
+  document.getElementById(
+    "highCount"
+  ).innerText =
+    inspections.filter(
+      x => x.risk === "High"
+    ).length;
+
+
+  document.getElementById(
+    "criticalCount"
+  ).innerText =
+    inspections.filter(
+      x => x.risk === "Critical"
+    ).length;
+
+}
+
+
+/* =====================================================
+   RESET FORM
+===================================================== */
+
+
+function resetForm() {
+
+  document.getElementById(
+    "inspector"
+  ).value = "";
+
+
+  document.getElementById(
+    "tanggal"
+  ).value = "";
+
+
+  document.getElementById(
+    "area"
+  ).value = "";
+
+
+  document.getElementById(
+    "temuan"
+  ).value = "";
+
+
+  document.getElementById(
+    "risk"
+  ).value = "Low";
+
+
+  document.getElementById(
+    "correctiveAction"
+  ).value = "";
+
+
+  document.getElementById(
+    "status"
+  ).value = "Open";
+
+
+  document
+    .querySelectorAll(
+      '.checklist input[type="checkbox"]'
+    )
+    .forEach(function(box) {
+
+      box.checked = false;
+
+    });
+
+}
+
+
+/* =====================================================
+   DATE FORMAT
+===================================================== */
+
+
+function formatTanggal(dateString) {
+
+  if (!dateString)
+    return "-";
+
+
+  const parts =
+    dateString.split("-");
+
+
+  if (parts.length !== 3)
+    return dateString;
+
+
+  return (
+    parts[2]
+    + "/"
+    + parts[1]
+    + "/"
+    + parts[0]
+  );
+
+}
+
+
+/* =====================================================
+   MESSAGE
+===================================================== */
+
+
+function showError(message) {
+
+  const error =
+    document.getElementById(
+      "errorMessage"
+    );
+
+  error.innerText =
+    message;
+
+  error.style.display =
+    "block";
+
+}
+
+
+function hideMessages() {
+
+  document.getElementById(
+    "successMessage"
+  ).style.display =
+    "none";
+
+
+  document.getElementById(
+    "errorMessage"
+  ).style.display =
+    "none";
+
+}
+
+
+/* =====================================================
+   START APPLICATION
+===================================================== */
+
+
+loadInspections();
+
 
 </script>
 
+
 </body>
+
 </html>
