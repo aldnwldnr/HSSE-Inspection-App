@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <title>HSSE Inspection App</title>
 
   <style>
@@ -15,7 +14,7 @@
     }
 
     .container {
-      max-width: 650px;
+      max-width: 900px;
       margin: auto;
       background: white;
       padding: 30px;
@@ -79,6 +78,46 @@
     button:hover {
       background: #2d6a4f;
     }
+
+    .summary {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 10px;
+      margin-top: 30px;
+    }
+
+    .card {
+      background: #f8f9fa;
+      padding: 15px;
+      border-radius: 8px;
+      text-align: center;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    th, td {
+      border: 1px solid #ddd;
+      padding: 10px;
+      text-align: left;
+    }
+
+    th {
+      background: #1b4332;
+      color: white;
+    }
+
+    .success {
+      background: #d8f3dc;
+      color: #1b4332;
+      padding: 12px;
+      margin-top: 15px;
+      border-radius: 6px;
+      display: none;
+    }
   </style>
 </head>
 
@@ -90,19 +129,19 @@
   <div class="subtitle">Workplace Safety Inspection Form</div>
 
   <label>Nama Inspector</label>
-  <input type="text" placeholder="Masukkan nama inspector">
+  <input id="inspector" type="text" placeholder="Masukkan nama inspector">
 
   <label>Tanggal Inspeksi</label>
-  <input type="date">
+  <input id="tanggal" type="date">
 
   <label>Area Inspeksi</label>
-  <select>
+  <select id="area">
     <option value="">Pilih area</option>
-    <option>Jetty</option>
-    <option>Warehouse</option>
-    <option>Workshop</option>
-    <option>Office</option>
-    <option>Yard</option>
+    <option>Jetty Existing</option>
+    <option>Kantor Ops Baru</option>
+    <option>Main Gate</option>
+    <option>Buffer Out</option>
+    <option>Buffer In</option>
   </select>
 
   <div class="checklist">
@@ -110,38 +149,38 @@
     <strong>Safety Checklist</strong>
 
     <div class="check-item">
-      <input type="checkbox">
+      <input type="checkbox" class="checklist-item">
       APD digunakan dengan lengkap
     </div>
 
     <div class="check-item">
-      <input type="checkbox">
+      <input type="checkbox" class="checklist-item">
       Area kerja dalam kondisi aman
     </div>
 
     <div class="check-item">
-      <input type="checkbox">
+      <input type="checkbox" class="checklist-item">
       Housekeeping dalam kondisi baik
     </div>
 
     <div class="check-item">
-      <input type="checkbox">
+      <input type="checkbox" class="checklist-item">
       APAR tersedia dan dapat diakses
     </div>
 
     <div class="check-item">
-      <input type="checkbox">
+      <input type="checkbox" class="checklist-item">
       Jalur evakuasi tidak terhalang
     </div>
 
   </div>
 
   <label>Temuan / Unsafe Condition</label>
-  <textarea rows="4"
+  <textarea id="temuan" rows="4"
     placeholder="Tuliskan temuan hasil inspeksi..."></textarea>
 
   <label>Risk Level</label>
-  <select>
+  <select id="risk">
     <option>Low</option>
     <option>Medium</option>
     <option>High</option>
@@ -149,12 +188,161 @@
   </select>
 
   <label>Corrective Action</label>
-  <textarea rows="4"
+  <textarea id="correctiveAction" rows="4"
     placeholder="Tuliskan tindakan perbaikan..."></textarea>
 
-  <button>Simpan Inspeksi</button>
+  <button onclick="simpanInspeksi()">Simpan Inspeksi</button>
+
+  <div id="successMessage" class="success">
+    ✅ Data inspeksi berhasil disimpan.
+  </div>
+
+  <div class="summary">
+    <div class="card">
+      <strong>Total</strong>
+      <div id="totalCount">0</div>
+    </div>
+
+    <div class="card">
+      <strong>Low</strong>
+      <div id="lowCount">0</div>
+    </div>
+
+    <div class="card">
+      <strong>Medium</strong>
+      <div id="mediumCount">0</div>
+    </div>
+
+    <div class="card">
+      <strong>High</strong>
+      <div id="highCount">0</div>
+    </div>
+
+    <div class="card">
+      <strong>Critical</strong>
+      <div id="criticalCount">0</div>
+    </div>
+  </div>
+
+  <h2>Inspection History</h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Tanggal</th>
+        <th>Inspector</th>
+        <th>Area</th>
+        <th>Risk</th>
+        <th>Temuan</th>
+        <th>Corrective Action</th>
+      </tr>
+    </thead>
+
+    <tbody id="historyTable">
+    </tbody>
+  </table>
 
 </div>
+
+<script>
+
+let inspections =
+  JSON.parse(localStorage.getItem("hsseInspections")) || [];
+
+function simpanInspeksi() {
+
+  const inspector =
+    document.getElementById("inspector").value;
+
+  const tanggal =
+    document.getElementById("tanggal").value;
+
+  const area =
+    document.getElementById("area").value;
+
+  const temuan =
+    document.getElementById("temuan").value;
+
+  const risk =
+    document.getElementById("risk").value;
+
+  const correctiveAction =
+    document.getElementById("correctiveAction").value;
+
+  if (!inspector || !tanggal || !area) {
+    alert("Nama inspector, tanggal, dan area wajib diisi.");
+    return;
+  }
+
+  const data = {
+    inspector,
+    tanggal,
+    area,
+    temuan,
+    risk,
+    correctiveAction
+  };
+
+  inspections.push(data);
+
+  localStorage.setItem(
+    "hsseInspections",
+    JSON.stringify(inspections)
+  );
+
+  document.getElementById("successMessage").style.display = "block";
+
+  tampilkanData();
+
+  document.getElementById("inspector").value = "";
+  document.getElementById("tanggal").value = "";
+  document.getElementById("area").value = "";
+  document.getElementById("temuan").value = "";
+  document.getElementById("correctiveAction").value = "";
+}
+
+function tampilkanData() {
+
+  const table =
+    document.getElementById("historyTable");
+
+  table.innerHTML = "";
+
+  inspections.forEach(function(item) {
+
+    const row = `
+      <tr>
+        <td>${item.tanggal}</td>
+        <td>${item.inspector}</td>
+        <td>${item.area}</td>
+        <td>${item.risk}</td>
+        <td>${item.temuan}</td>
+        <td>${item.correctiveAction}</td>
+      </tr>
+    `;
+
+    table.innerHTML += row;
+  });
+
+  document.getElementById("totalCount").innerText =
+    inspections.length;
+
+  document.getElementById("lowCount").innerText =
+    inspections.filter(i => i.risk === "Low").length;
+
+  document.getElementById("mediumCount").innerText =
+    inspections.filter(i => i.risk === "Medium").length;
+
+  document.getElementById("highCount").innerText =
+    inspections.filter(i => i.risk === "High").length;
+
+  document.getElementById("criticalCount").innerText =
+    inspections.filter(i => i.risk === "Critical").length;
+}
+
+tampilkanData();
+
+</script>
 
 </body>
 </html>
